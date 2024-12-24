@@ -20,7 +20,6 @@ jobs:
 
     - name: Set up SSH agent
       run: |
-        mkdir -p ~/.ssh
         echo "$SSH_PRIVATE_KEY" > ~/.ssh/deploy_key
         chmod 600 ~/.ssh/deploy_key
         # Convert the key to PEM format (for compatibility with ssh-agent)
