@@ -24,13 +24,13 @@ jobs:
         SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
       run: |
         # Debug: Check the file permissions and contents
-        ls -l ~/.ssh
-        cat ~/.ssh/deploy_key
+        ls -l /home/me/.ssh
+        cat /home/me/.ssh/deploy_key
 
         # Connect via SSH and deploy the Dockerized app
-        ssh -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key me@localhost << 'EOF'
+        ssh -o StrictHostKeyChecking=no -i /home/me/.ssh/deploy_key me@localhost << 'EOF'
           # Navigate to the project directory
-          cd ~/Desktop/automated
+          cd /home/me/Desktop/automated
 
           # Pull the latest changes
           git pull origin main
@@ -44,5 +44,5 @@ jobs:
         EOF
 
     - name: Clean up
-      run: rm -f ~/.ssh/deploy_key
+      run: rm -f /home/me/.ssh/deploy_key
 
