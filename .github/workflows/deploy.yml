@@ -39,6 +39,8 @@ jobs:
         # Write the private key to the file
         echo "$SSH_PRIVATE_KEY" > ~/.ssh/deploy_key
         chmod 600 ~/.ssh/deploy_key
+        # Convert the key to PEM format if necessary
+        ssh-keygen -p -m PEM -f ~/.ssh/deploy_key
         ls -l ~/.ssh/deploy_key
 
         # Connect via SSH and deploy the Dockerized app
