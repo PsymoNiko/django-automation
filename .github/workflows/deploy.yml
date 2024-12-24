@@ -21,20 +21,20 @@ jobs:
     - name: Ensure the .ssh directory exists and has the correct permissions
       run: |
         # Ensure the .ssh directory exists and has the correct permissions
-        mkdir -p /home/me/.ssh
-        chmod 700 /home/me/.ssh
+        mkdir -p ~/.ssh
+        chmod 700 ~/.ssh
 
         # Write the private key to the file
-        echo "$SSH_PRIVATE_KEY" > /home/me/.ssh/deploy_key
-        chmod 600 /home/me/.ssh/deploy_key
+        echo "$SSH_PRIVATE_KEY" > ~/.ssh/deploy_key
+        chmod 600 ~/.ssh/deploy_key
 
         # Debug: Check the file permissions and contents
-        ls -l /home/me/.ssh
-        cat /home/me/.ssh/deploy_key
+        ls -l ~/.ssh
+        cat ~/.ssh/deploy_key
 
         # Start the SSH agent and add the key
         eval $(ssh-agent -s)
-        ssh-add /home/me/.ssh/deploy_key
+        ssh-add ~/.ssh/deploy_key
       shell: /usr/bin/bash -e {0}
       env:
         pythonLocation: /opt/hostedtoolcache/Python/3.12.8/x64
@@ -49,11 +49,11 @@ jobs:
         SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
       run: |
         # Debug: Check the file permissions and contents
-        ls -l /home/me/.ssh
-        cat /home/me/.ssh/deploy_key
+        ls -l ~/.ssh
+        cat ~/.ssh/deploy_key
 
         # Connect via SSH and deploy the Dockerized app
-        ssh -o StrictHostKeyChecking=no -i /home/me/.ssh/deploy_key me@localhost << 'EOF'
+        ssh -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key me@localhost << 'EOF'
           # Navigate to the project directory
           cd ~/Desktop/automated
 
@@ -69,5 +69,5 @@ jobs:
         EOF
 
     - name: Clean up
-      run: rm -f /home/me/.ssh/deploy_key
+      run: rm -f ~/.ssh/deploy_key
 
