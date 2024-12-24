@@ -18,17 +18,15 @@ jobs:
       with:
         python-version: '3.12'
 
-
     - name: Deploy to Localhost
       env:
         SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
       run: |
-        # Save the private key to a file
         echo "$SSH_PRIVATE_KEY" > deploy_key
         chmod 600 deploy_key
 
         # Connect via SSH and deploy the Dockerized app
-        ssh -o StrictHostKeyChecking=no -i deploy_key user@localhost << EOF
+        ssh -o StrictHostKeyChecking=no -i deploy_key user@localhost << 'EOF'
           # Navigate to the project directory
           cd ~/Desktop/automated
 
@@ -38,9 +36,9 @@ jobs:
           # Build and deploy the updated Docker containers
           docker-compose down
           docker-compose up --build -d
-          
+
           # Optional: Clean up unused Docker resources
-  #        docker system prune -f
+          # docker system prune -f
         EOF
 
     - name: Clean up
