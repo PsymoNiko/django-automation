@@ -17,11 +17,14 @@ jobs:
       uses: actions/setup-python@v4
       with:
         python-version: '3.12'
+
     - name: Set up SSH agent
       run: |
         mkdir -p ~/.ssh
         echo "$SSH_PRIVATE_KEY" > ~/.ssh/deploy_key
         chmod 600 ~/.ssh/deploy_key
+        # Convert the key to PEM format (for compatibility with ssh-agent)
+        ssh-keygen -p -m PEM -f ~/.ssh/deploy_key
         eval $(ssh-agent -s)
         ssh-add ~/.ssh/deploy_key
 
@@ -29,12 +32,12 @@ jobs:
       env:
         SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
       run: |
-        echo "$SSH_PRIVATE_KEY" > /tmp/deploy_key
-        chmod 600 /tmp/deploy_key
-        ls -l /tmp/deploy_key
+        echo "$SSH_PRIVATE_KEY" > ~/.ssh/deploy_key
+        chmod 600 ~/.ssh/deploy_key
+        ls -l ~/.ssh/deploy_key
 
         # Connect via SSH and deploy the Dockerized app
-        ssh -o StrictHostKeyChecking=no -i /tmp/deploy_key me@localhost << 'EOF'
+        ssh -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key me@localhost << 'EOF'
           # Navigate to the project directory
           cd ~/Desktop/automated
 
@@ -50,5 +53,5 @@ jobs:
         EOF
 
     - name: Clean up
-      run: rm -f /tmp/deploy_key
+      run: rm -f ~/.ssh/deploy_key
 
