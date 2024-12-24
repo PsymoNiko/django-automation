@@ -18,6 +18,31 @@ jobs:
       with:
         python-version: '3.12'
 
+    - name: Ensure the .ssh directory exists and has the correct permissions
+      run: |
+        # Ensure the .ssh directory exists and has the correct permissions
+        mkdir -p /home/me/.ssh
+        chmod 700 /home/me/.ssh
+
+        # Write the private key to the file
+        echo "$SSH_PRIVATE_KEY" > /home/me/.ssh/deploy_key
+        chmod 600 /home/me/.ssh/deploy_key
+
+        # Debug: Check the file permissions and contents
+        ls -l /home/me/.ssh
+        cat /home/me/.ssh/deploy_key
+
+        # Start the SSH agent and add the key
+        eval $(ssh-agent -s)
+        ssh-add /home/me/.ssh/deploy_key
+      shell: /usr/bin/bash -e {0}
+      env:
+        pythonLocation: /opt/hostedtoolcache/Python/3.12.8/x64
+        PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.8/x64/lib/pkgconfig
+        Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.8/x64
+        Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.8/x64
+        Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.8/x64
+        LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.8/x64/lib
 
     - name: Deploy to Localhost
       env:
@@ -30,7 +55,7 @@ jobs:
         # Connect via SSH and deploy the Dockerized app
         ssh -o StrictHostKeyChecking=no -i /home/me/.ssh/deploy_key me@localhost << 'EOF'
           # Navigate to the project directory
-          cd /home/me/Desktop/automated
+          cd ~/Desktop/automated
 
           # Pull the latest changes
           git pull origin main
