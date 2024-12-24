@@ -26,7 +26,7 @@ jobs:
         chmod 600 deploy_key
 
         # Connect via SSH and deploy the Dockerized app
-        ssh -o StrictHostKeyChecking=no -i deploy_key user@localhost << 'EOF'
+        ssh -o StrictHostKeyChecking=no -i deploy_key me@localhost << 'EOF'
           # Navigate to the project directory
           cd ~/Desktop/automated
 
