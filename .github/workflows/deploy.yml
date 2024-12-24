@@ -20,28 +20,23 @@ jobs:
 
     - name: Set up SSH agent
       run: |
+        # Ensure the .ssh directory exists and has the correct permissions
+        mkdir -p ~/.ssh
         chmod 700 ~/.ssh
+        
         # Write the private key to the file
         echo "$SSH_PRIVATE_KEY" > ~/.ssh/deploy_key
         chmod 600 ~/.ssh/deploy_key
+        
         # Convert the key to PEM format (for compatibility with ssh-agent)
         ssh-keygen -p -m PEM -f ~/.ssh/deploy_key
+        
+        # Start the SSH agent and add the key
         eval $(ssh-agent -s)
         ssh-add ~/.ssh/deploy_key
 
     - name: Deploy to Localhost
-      env:
-        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
       run: |
-        # Ensure the .ssh directory exists
-        mkdir -p ~/.ssh
-        # Write the private key to the file
-        echo "$SSH_PRIVATE_KEY" > ~/.ssh/deploy_key
-        chmod 600 ~/.ssh/deploy_key
-        # Convert the key to PEM format if necessary
-        ssh-keygen -p -m PEM -f ~/.ssh/deploy_key
-        ls -l ~/.ssh/deploy_key
-
         # Connect via SSH and deploy the Dockerized app
         ssh -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key me@localhost << 'EOF'
           # Navigate to the project directory
