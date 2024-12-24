@@ -20,8 +20,6 @@ jobs:
 
     - name: Set up SSH agent
       run: |
-        # Ensure the .ssh directory exists
-        mkdir -p ~/.ssh
         # Write the private key to the file
         echo "$SSH_PRIVATE_KEY" > ~/.ssh/deploy_key
         chmod 600 ~/.ssh/deploy_key
