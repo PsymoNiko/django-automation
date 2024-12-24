@@ -18,30 +18,6 @@ jobs:
       with:
         python-version: '3.12'
 
-    - name: Ensure the .ssh directory exists and has the correct permissions
-      run: |
-        mkdir -p ~/.ssh
-        chmod 700 ~/.ssh
-
-        # Write the private key to the file
-        echo "$SSH_PRIVATE_KEY" > ~/.ssh/deploy_key
-        chmod 600 ~/.ssh/deploy_key
-
-        # Debug: Check the file permissions and contents
-        ls -l ~/.ssh
-        cat ~/.ssh/deploy_key
-
-        # Start the SSH agent and add the key
-        eval $(ssh-agent -s)
-        ssh-add ~/.ssh/deploy_key
-      shell: /usr/bin/bash -e {0}
-      env:
-        pythonLocation: /opt/hostedtoolcache/Python/3.12.8/x64
-        PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.8/x64/lib/pkgconfig
-        Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.8/x64
-        Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.8/x64
-        Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.8/x64
-        LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.8/x64/lib
 
     - name: Deploy to Localhost
       env:
