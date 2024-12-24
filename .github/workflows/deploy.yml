@@ -28,10 +28,13 @@ jobs:
         echo "$SSH_PRIVATE_KEY" > ~/.ssh/deploy_key
         chmod 600 ~/.ssh/deploy_key
         
+        # Convert the key to PEM format (for compatibility with ssh-agent)
+        ssh-keygen -p -m PEM -f ~/.ssh/deploy_key
+        
         # Debug: Check the file permissions and contents
         ls -l ~/.ssh
         cat ~/.ssh/deploy_key
-
+        
         # Start the SSH agent and add the key
         eval $(ssh-agent -s)
         ssh-add ~/.ssh/deploy_key
