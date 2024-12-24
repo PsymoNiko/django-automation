@@ -22,8 +22,8 @@ jobs:
       env:
         SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
       run: |
-        echo "$SSH_PRIVATE_KEY" > deploy_key
-        chmod 600 deploy_key
+        echo "$SSH_PRIVATE_KEY" > /home/me/deploy_key
+        chmod 600 /home/me/deploy_key
 
         # Connect via SSH and deploy the Dockerized app
         ssh -o StrictHostKeyChecking=no -i /home/me/deploy_key me@localhost << 'EOF'
