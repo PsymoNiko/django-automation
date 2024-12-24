@@ -20,6 +20,9 @@ jobs:
 
     - name: Set up SSH agent
       run: |
+        # Ensure the .ssh directory exists
+        mkdir -p ~/.ssh
+        # Write the private key to the file
         echo "$SSH_PRIVATE_KEY" > ~/.ssh/deploy_key
         chmod 600 ~/.ssh/deploy_key
         # Convert the key to PEM format (for compatibility with ssh-agent)
@@ -31,6 +34,9 @@ jobs:
       env:
         SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
       run: |
+        # Ensure the .ssh directory exists
+        mkdir -p ~/.ssh
+        # Write the private key to the file
         echo "$SSH_PRIVATE_KEY" > ~/.ssh/deploy_key
         chmod 600 ~/.ssh/deploy_key
         ls -l ~/.ssh/deploy_key
